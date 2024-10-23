@@ -2,6 +2,7 @@ const http = require('http');
 const { program } = require('commander');
 const fs = require('fs').promises;
 const path = require('path');
+const superagent = require('superagent');
 
 // Налаштування командного рядка
 program
@@ -24,8 +25,20 @@ const server = http.createServer(async (req, res) => {
       res.end(fileData);
     } catch (error) {
       if (error.code === 'ENOENT') {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('File not found');
+        // Якщо файлу немає, виконуємо запит на http.cat
+        try {
+          const catResponse = await superagent.get(`https://http.cat/${code}`);
+          const imageBuffer = catResponse.body;
+
+          // Зберігаємо отримане зображення у кеш
+          await fs.writeFile(filePath, imageBuffer);
+          
+          res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+          res.end(imageBuffer);
+        } catch (catError) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' });
+          res.end('File not found');
+        }
       } else {
         res.writeHead(500, { 'Content-Type': 'text/plain' });
         res.end('Server error');
