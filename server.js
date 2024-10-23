@@ -1,3 +1,4 @@
+//Імпорт необхідних модулів
 const http = require('http');
 const { program } = require('commander');
 const fs = require('fs').promises;
@@ -19,6 +20,7 @@ const server = http.createServer(async (req, res) => {
   const filePath = path.join(".cache", `${code}.jpg`);
 
   //Обробка HTTP-запитів
+     //Метод GET для отримання картинки з кешу або http.cat
   if (req.method === 'GET') {
     try {
       const fileData = await fs.readFile(filePath);
@@ -45,6 +47,7 @@ const server = http.createServer(async (req, res) => {
         res.end('Server error');
       }
     }
+    //Метод PUT для запису або оновлення файлу
   } else if (req.method === 'PUT') {
     let data = [];
     req.on('data', chunk => {
@@ -61,6 +64,7 @@ const server = http.createServer(async (req, res) => {
         res.end('Server error');
       }
     });
+    //Метод DELETE для видалення файлу
   } else if (req.method === 'DELETE') {
     try {
       await fs.unlink(filePath);
@@ -75,6 +79,7 @@ const server = http.createServer(async (req, res) => {
         res.end('Server error');
       }
     }
+    //Інші методи (не дозволені)
   } else {
     res.writeHead(405, { 'Content-Type': 'text/plain' });
     res.end('Method not allowed');
