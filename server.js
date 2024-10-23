@@ -18,6 +18,7 @@ const server = http.createServer(async (req, res) => {
   const code = req.url.slice(1); // Отримуємо код HTTP з URL (без '/')
   const filePath = path.join(".cache", `${code}.jpg`);
 
+  //Обробка HTTP-запитів
   if (req.method === 'GET') {
     try {
       const fileData = await fs.readFile(filePath);
@@ -80,6 +81,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+//Запуск сервера
 server.listen(port, host, () => {
   console.log(`Server running at http://${host}:${port}/`);
   console.log(`Cache directory is set to: ${cache}`);
