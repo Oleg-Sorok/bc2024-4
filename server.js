@@ -17,7 +17,7 @@ const { host, port, cache } = program.opts();
 // Створення вебсервера
 const server = http.createServer(async (req, res) => {
   const code = req.url.slice(1); // Отримуємо код HTTP з URL (без '/')
-  const filePath = path.join(".cache", `${code}.jpg`);
+  const filePath = path.join("data", `${code}.jpg`);
 
   //Обробка HTTP-запитів
      //Метод GET для отримання картинки з кешу або http.cat
