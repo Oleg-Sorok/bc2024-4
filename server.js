@@ -12,7 +12,7 @@ program
   .requiredOption('-c, --cache <path>', 'cache directory path')
   .parse(process.argv);
 
-const { host, port, cache } = program.opts();
+const { host, port, cache } = program.opts(); 
 
 // Створення вебсервера
 const server = http.createServer(async (req, res) => {
