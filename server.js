@@ -7,17 +7,17 @@ const superagent = require('superagent');
 
 // Налаштування командного рядка
 program
-  .requiredOption('-H, --host <host>', 'server host')
-  .requiredOption('-p, --port <port>', 'server port')
-  .requiredOption('-c, --cache <path>', 'cache directory path')
+  .requiredOption('-H, --host <type>', 'server host')
+  .requiredOption('-p, --port <type>', 'server port')
+  .requiredOption('-c, --cache <type>', 'cache directory path')
   .parse(process.argv);
 
-const { host, port, cache } = program.opts(); 
+const options = program.opts(); 
 
 // Створення вебсервера
 const server = http.createServer(async (req, res) => {
   const code = req.url.slice(1); // Отримуємо код HTTP з URL (без '/')
-  const filePath = path.join("data", `${code}.jpg`);
+  const filePath = path.join(options.cache, `${code}.jpg`);
 
   //Обробка HTTP-запитів
      //Метод GET для отримання картинки з кешу або http.cat
@@ -87,7 +87,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 //Запуск сервера
-server.listen(port, host, () => {
-  console.log(`Server running at http://${host}:${port}/`);
-  console.log(`Cache directory is set to: ${cache}`);
+server.listen(options.port, options.host, () => {
+  console.log(`Server running at http://${options.host}:${options.port}/`);
 });
